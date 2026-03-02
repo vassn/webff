@@ -15,7 +15,7 @@
 			files = uploadedFiles;
 			status = 'converting';
 			await convert(files);
-			status = 'done';
+			if (status === 'converting') status = 'done';
 		}
 	}
 
