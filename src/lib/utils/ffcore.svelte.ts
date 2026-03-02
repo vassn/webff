@@ -50,7 +50,7 @@ class Converter {
 
 		try {
 			await ffmpeg.writeFile(file.name, await fetchFile(file));
-			await ffmpeg.exec(['-y', '-i', file.name, ...args, outputName]);
+			await ffmpeg.exec(['-analyzeduration', '5M', '-probesize', '5M', '-i', file.name, ...args, outputName]);
 
 			const data = await ffmpeg.readFile(outputName);
 			const fileData = typeof data === 'string' ? data : (data as ArrayBufferView<ArrayBuffer>);

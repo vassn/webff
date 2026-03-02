@@ -19,7 +19,7 @@ export function isUploadValid(files: FileState[]): boolean {
 	return true;
 }
 
-const webpOptions = ['-frames:v', '1', '-c:v', 'libwebp', '-q:v', '80'];
+const webpOptions = ['-frames:v', '1', '-c:v', 'libwebp', '-q:v', '80', '-f', 'image2', '-sn', '-dn'];
 const webmOptions = [
 	'-c:v',
 	'libvpx',
@@ -30,11 +30,15 @@ const webmOptions = [
 	'-cpu-used',
 	'5',
 	'-threads',
-	'0',
+	'4',
+	'-vf',
+	'scale=trunc(iw/2)*2:trunc(ih/2)*2',
 	'-c:a',
 	'libvorbis',
 	'-q:a',
-	'4'
+	'4',
+	'-sn',
+	'-dn'
 ];
 
 export async function convert(files: FileState[]): Promise<void> {
