@@ -19,7 +19,7 @@ export function isUploadValid(files: FileState[]): boolean {
 	return true;
 }
 
-const webpOptions = ['-frames:v', '1', '-c:v', 'libwebp', '-q:v', '80', '-f', 'image2', '-sn', '-dn'];
+const webpOptions = ['-vframes', '1', '-an', '-c:v', 'libwebp', '-q:v', '80'];
 const webmOptions = [
 	'-c:v',
 	'libvpx',
