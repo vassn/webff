@@ -108,7 +108,7 @@ const formats: Record<string, Format[]> = {
 		{
 			label: 'JPEG',
 			extension: '.jpeg',
-			options: ['-c:v', 'mjpeg', '-pix_fmt', 'yuvj420p', '-q:v', '2', '-threads', '1']
+			options: ['-c:v', 'mjpeg', '-pix_fmt', 'yuv420p', '-q:v', '2', '-an', '-threads', '1']
 		},
 		{ label: 'PNG', extension: '.png', options: ['-c:v', 'png', '-threads', '1'] },
 		{ label: 'GIF', extension: '.gif', options: ['-threads', '1'] },
