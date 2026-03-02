@@ -108,28 +108,12 @@ const formats: Record<string, Format[]> = {
 		{
 			label: 'JPEG',
 			extension: '.jpeg',
-			options: ['-vframes', '1', '-c:v', 'mjpeg', '-pix_fmt', 'yuvj420p', '-q:v', '2']
+			options: ['-c:v', 'mjpeg', '-pix_fmt', 'yuvj420p', '-q:v', '2', '-threads', '1']
 		},
-		{
-			label: 'PNG',
-			extension: '.png',
-			options: ['-frames:v', '1', '-c:v', 'png']
-		},
-		{
-			label: 'GIF',
-			extension: '.gif',
-			options: []
-		},
-		{
-			label: 'TIFF',
-			extension: '.tiff',
-			options: ['-frames:v', '1']
-		},
-		{
-			label: 'BMP',
-			extension: '.bmp',
-			options: ['-frames:v', '1']
-		}
+		{ label: 'PNG', extension: '.png', options: ['-c:v', 'png', '-threads', '1'] },
+		{ label: 'GIF', extension: '.gif', options: ['-threads', '1'] },
+		{ label: 'TIFF', extension: '.tiff', options: ['-threads', '1'] },
+		{ label: 'BMP', extension: '.bmp', options: ['-threads', '1'] }
 	],
 	audio: [
 		{ label: 'MP3', extension: '.mp3', options: ['-c:a', 'libmp3lame', '-q:a', '4'] },
