@@ -3,7 +3,7 @@
 	import { Binary, Computer, PanelsTopLeft, Shield } from '@lucide/svelte';
 </script>
 
-<section class="gap-4 pt-12 text-center">
+<section class="pt-12 text-center">
 	<h1 class="pb-6 text-5xl font-semibold tracking-tight">Private In-Browser Media Converter</h1>
 	<h2 class="mx-auto max-w-[60ch] text-lg text-muted-foreground">
 		Securely convert and optimize your files without ever uploading them to a server. No ads, no tracking, no server

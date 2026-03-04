@@ -4,17 +4,11 @@
 	import SiteFooter from '$lib/components/site-footer.svelte';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
-	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import { ModeWatcher } from 'mode-watcher';
-	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import '../app.css';
 
 	let { children } = $props();
-
-	onMount(async () => {
-		if (!ffcore.ffmpeg) ffcore.load();
-	});
 </script>
 
 <svelte:head>

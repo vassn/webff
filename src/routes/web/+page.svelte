@@ -3,6 +3,7 @@
 	import FileUpload from '$lib/components/file-upload.svelte';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import type { FileState } from '$lib/utils/utils';
+	import { fly } from 'svelte/transition';
 	import { convert, isUploadValid } from './utils';
 
 	type Status = 'idle' | 'converting' | 'done';
@@ -27,7 +28,7 @@
 </script>
 
 <section class="pt-6 text-center md:pt-12">
-	<h1 class="pb-2 text-4xl font-semibold">Web Optimize</h1>
+	<h1 class="pb-4 text-4xl font-semibold">Web Optimize</h1>
 	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
 		Easily convert images and videos to optimized WebP and WebM formats. <br class="hidden md:block" />
 		Save time by uploading images and videos together for seamless bulk conversion.
@@ -35,11 +36,11 @@
 </section>
 
 {#if status === 'idle'}
-	<section class="flex justify-center pt-12">
+	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<FileUpload onUpload={onFilesUploaded} />
 	</section>
 {:else}
-	<section class="flex justify-center pt-12">
+	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<ConversionProgress {files} {reset} />
 	</section>
 {/if}

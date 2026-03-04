@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Item from '$lib/components/ui/item';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import type { FileState } from '$lib/utils/utils';
 	import { Check, Download, X } from '@lucide/svelte';
@@ -47,55 +46,61 @@
 	}
 </script>
 
-<Item.Root variant="muted" class="w-full max-w-lg">
-	<Item.Media>
-		{#if isConverting}
-			<Spinner class="size-5" />
-		{:else}
-			<Check class="size-5" />
-		{/if}
-	</Item.Media>
+<div class="w-full max-w-lg rounded-lg bg-card p-4">
+	{#if ffcore.state !== 'loaded'}
+		<!-- Loading FFmpeg -->
+		<div class="flex items-center justify-between">
+			<div class="flex items-center gap-4">
+				<Spinner class="size-5" />
+				<span class="text-sm font-medium">Loading FFmpeg...</span>
+			</div>
 
-	<Item.Content>
-		<Item.Title class="line-clamp-1">
-			{#if isConverting}
-				<span class="hidden sm:block">Converting files...</span>
-				<span class="block sm:hidden">Converting...</span>
-			{:else}
-				<span class="hidden sm:block">Conversion finished</span>
-				<span class="block sm:hidden">Finished</span>
-			{/if}
-		</Item.Title>
-	</Item.Content>
-
-	{#if isConverting}
-		<Item.Content>
-			<Item.Title class="text-muted-foreground tabular-nums">
-				{convertingCount} / {files.length}
-			</Item.Title>
-		</Item.Content>
-	{/if}
-
-	<Item.Actions>
-		{#if isConverting}
 			<Button onclick={reset} variant="outline">
 				<X /> Cancel
 			</Button>
-		{:else}
-			<Button onclick={download} disabled={isDownloading}>
-				{#if isDownloading}
-					<Spinner />
-				{:else}
-					<Download />
-				{/if}
-				Download files
-			</Button>
-		{/if}
-	</Item.Actions>
+		</div>
+	{:else if isConverting}
+		<!-- Converting -->
+		<div class="flex items-center justify-between">
+			<div class="flex items-center gap-4">
+				<Spinner class="size-5" />
+				<span class="text-sm font-medium">Converting files...</span>
+			</div>
 
-	{#if isConverting}
-		<Item.Footer class="pt-2">
-			<Progress value={ffcore.progress === 100 ? 0 : ffcore.progress} />
-		</Item.Footer>
+			<div class="flex items-center gap-4">
+				<span class="text-sm font-medium text-muted-foreground tabular-nums">
+					{convertingCount} / {files.length}
+				</span>
+				<Button onclick={reset} variant="outline">
+					<X /> Cancel
+				</Button>
+			</div>
+		</div>
+
+		<div class="mt-6 mb-1">
+			{#if ffcore.currentType === 'image'}
+				<Progress value={0} class="animate-pulse" />
+			{:else}
+				<Progress value={ffcore.progress === 100 ? 0 : ffcore.progress} />
+			{/if}
+		</div>
+	{:else}
+		<!-- Done -->
+		<div class="flex items-center justify-between">
+			<div class="flex items-center gap-4">
+				<Check class="size-5" />
+				<span class="text-sm font-medium">Conversion finished</span>
+			</div>
+
+			{#if !isDownloading}
+				<Button onclick={download}>
+					<Download /> Download files
+				</Button>
+			{:else}
+				<Button disabled>
+					<Spinner /> Download files
+				</Button>
+			{/if}
+		</div>
 	{/if}
-</Item.Root>
+</div>

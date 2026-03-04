@@ -40,6 +40,7 @@ const webmOptions = [
 ];
 
 export async function convert(files: FileState[]): Promise<void> {
+	await ffcore.load();
 	for (const file of files) {
 		try {
 			file.status = 'converting';

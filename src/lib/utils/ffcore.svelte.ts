@@ -3,14 +3,13 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
 class Converter {
 	public ffmpeg?: FFmpeg;
-	public loaded = $state(false);
+	public state = $state<'undefined' | 'loading' | 'loaded'>('undefined');
+	public currentType = $state('');
 	public progress = $state(0);
-	private isLoading = false;
 
-	async load() {
-		if (this.isLoading) return;
-		this.loaded = false;
-		this.isLoading = true;
+	async load(mt = true) {
+		if (this.state === 'loading') return;
+		this.state = 'loading';
 
 		try {
 			if (this.ffmpeg) {
@@ -20,12 +19,14 @@ class Converter {
 			}
 
 			const ffmpeg = new FFmpeg();
-			const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10/dist/esm';
+			const baseURL = mt
+				? 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10/dist/esm'
+				: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
 
 			await ffmpeg.load({
 				coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
 				wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-				workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript')
+				...(mt && { workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript') })
 			});
 
 			this.progress = 0;
@@ -34,19 +35,19 @@ class Converter {
 			});
 
 			this.ffmpeg = ffmpeg;
-			this.loaded = true;
-			console.log('FFmpeg loaded successfully.');
+			this.state = 'loaded';
+			console.log(`FFmpeg (${mt ? 'multi' : 'single'}-threaded) loaded successfully.`);
 		} catch (e) {
-			this.loaded = false;
-			console.error('FFmpeg load failed:', e);
-		} finally {
-			this.isLoading = false;
+			this.state = 'undefined';
+			console.error('FFmpeg failed to load:', e);
 		}
 	}
 
 	async transcode(file: File, args: string[], outputName: string) {
 		const ffmpeg = this.ffmpeg;
 		if (!ffmpeg) return;
+
+		this.currentType = file.type.split('/')[0];
 
 		try {
 			await ffmpeg.writeFile(file.name, await fetchFile(file));

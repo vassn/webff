@@ -41,7 +41,7 @@
 </script>
 
 <section class="pt-6 text-center md:pt-12">
-	<h1 class="pb-2 text-4xl font-semibold">Quick Convert</h1>
+	<h1 class="pb-4 text-4xl font-semibold">Quick Convert</h1>
 	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
 		Easily convert video, image, and audio files to any popular format. <br class="hidden md:block" />
 		Save time by batch converting multiple files of the same type in bulk.

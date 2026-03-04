@@ -156,6 +156,7 @@ export function isUploadValid(files: FileState[]): boolean {
 // Conversion
 
 export async function convert(files: FileState[], targetLabel: string): Promise<void> {
+	await ffcore.load();
 	const targetFormat = getFormats(files).find((format) => format.label === targetLabel)!;
 	for (const file of files) {
 		try {
