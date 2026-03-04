@@ -6,6 +6,7 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import { type FileState } from '$lib/utils/utils';
+	import { fly } from 'svelte/transition';
 	import { convert, getFormats, isUploadValid } from './utils';
 
 	type Status = 'idle' | 'selecting-format' | 'converting' | 'done';
@@ -49,7 +50,7 @@
 </section>
 
 {#if status === 'idle' || status === 'selecting-format'}
-	<section class="flex justify-center pt-12">
+	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<FileUpload onUpload={onFilesUploaded} />
 
 		<Dialog.Root open={status === 'selecting-format'} onOpenChange={closeDialog}>
@@ -82,7 +83,7 @@
 		</Dialog.Root>
 	</section>
 {:else}
-	<section class="flex justify-center pt-12">
+	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<ConversionProgress {files} {reset} />
 	</section>
 {/if}
