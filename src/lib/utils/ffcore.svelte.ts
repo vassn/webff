@@ -7,7 +7,7 @@ class Converter {
 	public currentType = $state('');
 	public progress = $state(0);
 
-	async load(mt = true) {
+	async load() {
 		if (this.state === 'loading') return;
 		this.state = 'loading';
 
@@ -19,14 +19,12 @@ class Converter {
 			}
 
 			const ffmpeg = new FFmpeg();
-			const baseURL = mt
-				? 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10/dist/esm'
-				: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+			const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10/dist/esm';
 
 			await ffmpeg.load({
 				coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
 				wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-				...(mt && { workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript') })
+				workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript')
 			});
 
 			this.progress = 0;
@@ -36,7 +34,7 @@ class Converter {
 
 			this.ffmpeg = ffmpeg;
 			this.state = 'loaded';
-			console.log(`FFmpeg (${mt ? 'multi' : 'single'}-threaded) loaded successfully.`);
+			console.log(`FFmpeg loaded successfully.`);
 		} catch (e) {
 			this.state = 'undefined';
 			console.error('FFmpeg failed to load:', e);

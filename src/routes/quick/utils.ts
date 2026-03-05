@@ -105,15 +105,11 @@ const formats: Record<string, Format[]> = {
 		}
 	],
 	image: [
-		{
-			label: 'JPEG',
-			extension: '.jpeg',
-			options: ['-c:v', 'mjpeg', '-pix_fmt', 'yuv420p', '-q:v', '2', '-an', '-threads', '1']
-		},
-		{ label: 'PNG', extension: '.png', options: ['-c:v', 'png', '-threads', '1'] },
-		{ label: 'GIF', extension: '.gif', options: ['-threads', '1'] },
-		{ label: 'TIFF', extension: '.tiff', options: ['-threads', '1'] },
-		{ label: 'BMP', extension: '.bmp', options: ['-threads', '1'] }
+		{ label: 'JPEG', extension: '.jpeg', options: [] },
+		{ label: 'PNG', extension: '.png', options: [] },
+		{ label: 'GIF', extension: '.gif', options: [] },
+		{ label: 'TIFF', extension: '.tiff', options: [] },
+		{ label: 'BMP', extension: '.bmp', options: [] }
 	],
 	audio: [
 		{ label: 'MP3', extension: '.mp3', options: ['-c:a', 'libmp3lame', '-q:a', '4'] },
@@ -156,8 +152,16 @@ export function isUploadValid(files: FileState[]): boolean {
 // Conversion
 
 export async function convert(files: FileState[], targetLabel: string): Promise<void> {
-	await ffcore.load();
 	const targetFormat = getFormats(files).find((format) => format.label === targetLabel)!;
+
+	if (targetFormat.label === 'PNG') {
+		await convertImage(files, 'image/png', 'png');
+		return;
+	} else if (targetFormat.label === 'JPEG') {
+		await convertImage(files, 'image/jpeg', 'jpeg');
+		return;
+	}
+
 	for (const file of files) {
 		try {
 			file.status = 'converting';
@@ -167,6 +171,27 @@ export async function convert(files: FileState[], targetLabel: string): Promise<
 		} catch (error) {
 			file.status = 'error';
 			await ffcore.load();
+		}
+	}
+}
+
+async function convertImage(files: FileState[], mime: 'image/png' | 'image/jpeg', extension: string) {
+	for (const file of files) {
+		try {
+			file.status = 'converting';
+
+			const bitmap = await createImageBitmap(file.input);
+			const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+			const ctx = canvas.getContext('2d')!;
+			ctx.drawImage(bitmap, 0, 0);
+			bitmap.close();
+			const blob = await canvas.convertToBlob({ type: mime, ...(mime === 'image/jpeg' && { quality: 0.92 }) });
+			file.output = new File([blob], `${getFileBaseName(file.input)}.${extension}`);
+
+			file.status = 'done';
+		} catch (error) {
+			file.status = 'error';
+			console.error(`${mime} conversion failed:`, error);
 		}
 	}
 }
