@@ -8,76 +8,33 @@ type Format = {
 	label: string;
 	extension: string;
 	options: string[];
+	mime?: 'image/png' | 'image/jpeg';
 };
+
+const x264Options = [
+	'-c:v',
+	'libx264',
+	'-preset',
+	'superfast',
+	'-crf',
+	'23',
+	'-vf',
+	'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+	'-c:a',
+	'aac',
+	'-b:a',
+	'128k',
+	'-sn',
+	'-dn',
+	'-threads',
+	'4'
+];
 
 const formats: Record<string, Format[]> = {
 	video: [
-		{
-			label: 'MP4',
-			extension: '.mp4',
-			options: [
-				'-c:v',
-				'libx264',
-				'-preset',
-				'superfast',
-				'-crf',
-				'23',
-				'-vf',
-				'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-				'-c:a',
-				'aac',
-				'-b:a',
-				'128k',
-				'-sn',
-				'-dn',
-				'-threads',
-				'4'
-			]
-		},
-		{
-			label: 'MOV',
-			extension: '.mov',
-			options: [
-				'-c:v',
-				'libx264',
-				'-preset',
-				'superfast',
-				'-crf',
-				'23',
-				'-vf',
-				'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-				'-c:a',
-				'aac',
-				'-b:a',
-				'128k',
-				'-sn',
-				'-dn',
-				'-threads',
-				'4'
-			]
-		},
-		{
-			label: 'MKV',
-			extension: '.mkv',
-			options: [
-				'-c:v',
-				'libx264',
-				'-preset',
-				'superfast',
-				'-crf',
-				'23',
-				'-vf',
-				'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-				'-c:a',
-				'aac',
-				'-b:a',
-				'128k',
-				'-sn',
-				'-dn',
-				'-threads',
-				'4'
-			]
-		},
+		{ label: 'MP4', extension: '.mp4', options: x264Options },
+		{ label: 'MOV', extension: '.mov', options: x264Options },
+		{ label: 'MKV', extension: '.mkv', options: x264Options },
 		{
 			label: 'AVI',
 			extension: '.avi',
@@ -105,8 +62,8 @@ const formats: Record<string, Format[]> = {
 		}
 	],
 	image: [
-		{ label: 'JPEG', extension: '.jpeg', options: [] },
-		{ label: 'PNG', extension: '.png', options: [] },
+		{ label: 'JPEG', extension: '.jpeg', options: [], mime: 'image/jpeg' },
+		{ label: 'PNG', extension: '.png', options: [], mime: 'image/png' },
 		{ label: 'GIF', extension: '.gif', options: [] },
 		{ label: 'TIFF', extension: '.tiff', options: [] },
 		{ label: 'BMP', extension: '.bmp', options: [] }
@@ -141,7 +98,7 @@ export function isUploadValid(files: FileState[]): boolean {
 		return false;
 	}
 
-	if (baseType !== 'image' && baseType !== 'video' && baseType !== 'audio') {
+	if (!['image', 'video', 'audio'].includes(baseType)) {
 		toast.error("An uploaded file's media type is not supported");
 		return false;
 	}
@@ -152,13 +109,10 @@ export function isUploadValid(files: FileState[]): boolean {
 // Conversion
 
 export async function convert(files: FileState[], targetLabel: string): Promise<void> {
-	const targetFormat = getFormats(files).find((format) => format.label === targetLabel)!;
+	const targetFormat = getFormats(files).find((f) => f.label === targetLabel)!;
 
-	if (targetFormat.label === 'PNG') {
-		await convertImage(files, 'image/png', 'png');
-		return;
-	} else if (targetFormat.label === 'JPEG') {
-		await convertImage(files, 'image/jpeg', 'jpeg');
+	if (targetFormat.mime) {
+		await convertImage(files, targetFormat.mime);
 		return;
 	}
 
@@ -168,18 +122,19 @@ export async function convert(files: FileState[], targetLabel: string): Promise<
 			const outputName = getFileBaseName(file.input) + targetFormat.extension;
 			file.output = await ffcore.transcode(file.input, targetFormat.options, outputName);
 			file.status = 'done';
-		} catch (error) {
+		} catch {
 			file.status = 'error';
 			await ffcore.load();
 		}
 	}
 }
 
-async function convertImage(files: FileState[], mime: 'image/png' | 'image/jpeg', extension: string) {
+async function convertImage(files: FileState[], mime: 'image/png' | 'image/jpeg') {
+	const extension = mime.split('/')[1];
+
 	for (const file of files) {
 		try {
 			file.status = 'converting';
-
 			const bitmap = await createImageBitmap(file.input);
 			const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
 			const ctx = canvas.getContext('2d')!;
@@ -187,7 +142,6 @@ async function convertImage(files: FileState[], mime: 'image/png' | 'image/jpeg'
 			bitmap.close();
 			const blob = await canvas.convertToBlob({ type: mime, ...(mime === 'image/jpeg' && { quality: 0.92 }) });
 			file.output = new File([blob], `${getFileBaseName(file.input)}.${extension}`);
-
 			file.status = 'done';
 		} catch (error) {
 			file.status = 'error';
