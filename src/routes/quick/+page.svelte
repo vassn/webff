@@ -77,7 +77,7 @@
 
 				<Dialog.Footer>
 					<Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
-					<Button onclick={startConversion}>Convert</Button>
+					<Button onclick={startConversion} disabled={targetLabel === ''}>Convert</Button>
 				</Dialog.Footer>
 			</Dialog.Content>
 		</Dialog.Root>
