@@ -17,7 +17,9 @@ const webmOptions = [
 	'-vf',
 	'scale=trunc(iw/2)*2:trunc(ih/2)*2',
 	'-sn',
-	'-dn'
+	'-dn',
+	'-threads',
+	`6`
 ];
 
 export async function convert(files: FileState[]): Promise<void> {
@@ -34,9 +36,8 @@ export async function convert(files: FileState[]): Promise<void> {
 				const blob = await canvas.convertToBlob({ type: 'image/webp', quality: 0.85 });
 				file.output = new File([blob], outputName);
 			} else {
-				const threadCount = Math.max(1, navigator.hardwareConcurrency - 1);
 				const outputName = getFileBaseName(file.input) + '.webm';
-				file.output = await ffcore.transcode(file.input, [...webmOptions, '-threads', `${threadCount}`], outputName);
+				file.output = await ffcore.transcode(file.input, webmOptions, outputName);
 			}
 			file.status = 'done';
 		} catch (error) {

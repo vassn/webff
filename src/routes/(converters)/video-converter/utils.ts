@@ -26,7 +26,6 @@ export const formats = [
 
 export async function convert(files: FileState[], target: string): Promise<void> {
 	const targetFormat = formats.find((format) => format.label === target)!;
-	const threadCount = Math.max(1, navigator.hardwareConcurrency - 1);
 	for (const file of files) {
 		try {
 			file.status = 'converting';
@@ -40,7 +39,7 @@ export async function convert(files: FileState[], target: string): Promise<void>
 				'-sn',
 				'-dn',
 				'-threads',
-				`${threadCount}`
+				`6`
 			];
 			file.output = await ffcore.transcode(file.input, options, outputName);
 			file.status = 'done';
