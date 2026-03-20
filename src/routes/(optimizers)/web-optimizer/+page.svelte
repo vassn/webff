@@ -30,7 +30,7 @@
 </script>
 
 <section class="pt-6 text-center md:pt-12">
-	<h1 class="pb-4 text-4xl font-semibold">Web Optimize</h1>
+	<h1 class="pb-4 text-4xl font-semibold">Web Optimizer</h1>
 	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
 		Easily convert images and videos to optimized WebP and WebM formats. <br class="hidden md:block" />
 		Save time by uploading images and videos together for seamless bulk conversion.
