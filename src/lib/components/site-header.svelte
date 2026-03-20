@@ -9,7 +9,7 @@
 
 	let isMenuOpen = $state(false);
 
-	const isDesktop = new MediaQuery('min-width: 768px');
+	const isDesktop = new MediaQuery('min-width: 1024px');
 
 	$effect(() => {
 		if (isMenuOpen && isDesktop.current) isMenuOpen = false;
@@ -31,15 +31,17 @@
 <header class="sticky top-0 z-50 w-full bg-background">
 	<nav class="h-14 px-4 md:px-8">
 		<!-- Desktop View-->
-		<div class="hidden h-full items-center justify-between md:flex">
+		<div class="hidden h-full items-center justify-between lg:flex">
 			<div class="flex items-center gap-0.5">
 				<Button variant="ghost" href="/" class="gap-0 text-lg font-bold">
 					<span>Web</span>
 					<span class="text-primary">FF</span>
 				</Button>
-				<Button variant="ghost" href="/quick">Quick Convert</Button>
-				<Button variant="ghost" href="/web">Web Optimize</Button>
-				<Button variant="ghost" disabled href="/compress">Compress Video</Button>
+				<Button variant="ghost" href="/image-converter">Image Converter</Button>
+				<Button variant="ghost" href="/video-converter">Video Converter</Button>
+				<Button variant="ghost" href="/audio-converter">Audio Converter</Button>
+				<Button variant="ghost" href="/web-optimizer">Web Optimizer</Button>
+				<!-- <Button variant="ghost" href="/video-compressor">Video Compressor</Button> -->
 			</div>
 
 			<div class="flex items-center">
@@ -50,7 +52,7 @@
 		</div>
 
 		<!-- Mobile View-->
-		<div class="flex h-full items-center justify-between md:hidden">
+		<div class="flex h-full items-center justify-between lg:hidden">
 			<div class="flex items-center">
 				<Button variant="ghost" href="/" class="gap-0 text-lg font-bold">
 					<span>Web</span>

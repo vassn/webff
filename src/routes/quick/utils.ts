@@ -2,7 +2,31 @@ import { ffcore } from '$lib/utils/ffcore.svelte';
 import { getFileBaseName, type FileState } from '$lib/utils/utils';
 import { toast } from 'svelte-sonner';
 
-// Formats
+// Validation
+
+export function isUploadValid(files: FileState[]): boolean {
+	// 5e8 => 5*10^8 bytes => 500MB limit per file
+	if (!files.every((file) => file.input.size < 5e8)) {
+		toast.error('Each uploaded file must be under 500MB');
+		return false;
+	}
+
+	const baseType = files[0].input.type.split('/')[0];
+
+	if (!files.every((file) => file.input.type.split('/')[0] === baseType)) {
+		toast.error('All uploaded files must share the same media type');
+		return false;
+	}
+
+	if (!['image', 'video', 'audio'].includes(baseType)) {
+		toast.error("An uploaded file's media type is not supported");
+		return false;
+	}
+
+	return true;
+}
+
+// Options
 
 type Format = {
 	label: string;
@@ -82,70 +106,43 @@ export function getFormats(files: FileState[]): Format[] {
 	return formats[category] ?? [];
 }
 
-// Validation
-
-export function isUploadValid(files: FileState[]): boolean {
-	// 5e8 => 5*10^8 bytes => 500MB limit per file
-	if (!files.every((file) => file.input.size < 5e8)) {
-		toast.error('Each uploaded file must be under 500MB');
-		return false;
-	}
-
-	const baseType = files[0].input.type.split('/')[0];
-
-	if (!files.every((file) => file.input.type.split('/')[0] === baseType)) {
-		toast.error('All uploaded files must share the same media type');
-		return false;
-	}
-
-	if (!['image', 'video', 'audio'].includes(baseType)) {
-		toast.error("An uploaded file's media type is not supported");
-		return false;
-	}
-
-	return true;
-}
-
 // Conversion
 
 export async function convert(files: FileState[], targetLabel: string): Promise<void> {
 	const targetFormat = getFormats(files).find((f) => f.label === targetLabel)!;
 
-	if (targetFormat.mime) {
-		await convertImage(files, targetFormat.mime);
-		return;
-	}
-
 	for (const file of files) {
 		try {
 			file.status = 'converting';
 			const outputName = getFileBaseName(file.input) + targetFormat.extension;
-			file.output = await ffcore.transcode(file.input, targetFormat.options, outputName);
+
+			if (targetFormat.mime) {
+				await convertImage(file, targetFormat.mime);
+			} else {
+				file.output = await ffcore.transcode(file.input, targetFormat.options, outputName);
+			}
+
 			file.status = 'done';
-		} catch {
+		} catch (error) {
 			file.status = 'error';
-			await ffcore.load();
+			if (!targetFormat.mime) {
+				await ffcore.load();
+			}
 		}
 	}
 }
 
-async function convertImage(files: FileState[], mime: 'image/png' | 'image/jpeg') {
+async function convertImage(file: FileState, mime: 'image/png' | 'image/jpeg'): Promise<void> {
 	const extension = mime.split('/')[1];
-
-	for (const file of files) {
-		try {
-			file.status = 'converting';
-			const bitmap = await createImageBitmap(file.input);
-			const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-			const ctx = canvas.getContext('2d')!;
-			ctx.drawImage(bitmap, 0, 0);
-			bitmap.close();
-			const blob = await canvas.convertToBlob({ type: mime, ...(mime === 'image/jpeg' && { quality: 0.92 }) });
-			file.output = new File([blob], `${getFileBaseName(file.input)}.${extension}`);
-			file.status = 'done';
-		} catch (error) {
-			file.status = 'error';
-			console.error(`${mime} conversion failed:`, error);
-		}
+	const bitmap = await createImageBitmap(file.input);
+	const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+	const ctx = canvas.getContext('2d')!;
+	if (mime === 'image/jpeg') {
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
+	ctx.drawImage(bitmap, 0, 0);
+	bitmap.close();
+	const blob = await canvas.convertToBlob({ type: mime, ...(mime === 'image/jpeg' && { quality: 0.92 }) });
+	file.output = new File([blob], `${getFileBaseName(file.input)}.${extension}`);
 }

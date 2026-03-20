@@ -3,8 +3,9 @@
 	import FileUpload from '$lib/components/file-upload.svelte';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import type { FileState } from '$lib/utils/utils';
+	import { allSameType, allSupportedType, allUnderMB } from '$lib/utils/validation';
 	import { fly } from 'svelte/transition';
-	import { convert, isUploadValid } from './utils';
+	import { convert } from './utils';
 
 	type Status = 'idle' | 'converting' | 'done';
 
@@ -12,12 +13,13 @@
 	let status = $state<Status>('idle');
 
 	async function onFilesUploaded(uploadedFiles: FileState[]) {
-		if (isUploadValid(uploadedFiles)) {
-			files = uploadedFiles;
-			status = 'converting';
-			await convert(files);
-			if (status === 'converting') status = 'done';
-		}
+		if (!allUnderMB(uploadedFiles, 500)) return;
+		if (!allSameType(uploadedFiles)) return;
+		if (!allSupportedType(uploadedFiles, ['video', 'image'])) return;
+		files = uploadedFiles;
+		status = 'converting';
+		await convert(files);
+		if (status === 'converting') status = 'done';
 	}
 
 	function reset() {

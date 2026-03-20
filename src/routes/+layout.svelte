@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import favicon from '$lib/assets/favicon.svg';
 	import SiteFooter from '$lib/components/site-footer.svelte';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
@@ -18,12 +17,15 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<title>WebFF</title>
+
 	<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 	<link rel="preload" href="/fonts/inter-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+	<link rel="icon" href="/favicon.svg" />
 </svelte:head>
 
-<ModeWatcher />
+<ModeWatcher defaultMode="dark" />
 
 <Toaster position="top-center" richColors={true} />
 
