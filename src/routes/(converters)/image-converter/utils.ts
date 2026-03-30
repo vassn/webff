@@ -25,7 +25,7 @@ export async function convert(files: FileState[], target: string): Promise<void>
 			file.status = 'done';
 		} catch (error) {
 			file.status = 'error';
-			if (target !== '.jpeg' && target !== '.png') {
+			if (target !== '.jpeg' && target !== '.png' && target !== '.webp') {
 				await ffcore.load();
 			}
 		}

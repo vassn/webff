@@ -1,6 +1,7 @@
 import { ffcore } from '$lib/utils/ffcore.svelte';
 import { getFileBaseName, type FileState } from '$lib/utils/utils';
 
+const generalOptions = ['-b:a', '128k', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-sn', '-dn', '-threads', `6`];
 const x264Options = ['-c:v', 'libx264', '-preset', 'superfast', '-crf', '23', '-c:a', 'aac'];
 
 export const formats = [
@@ -30,18 +31,7 @@ export async function convert(files: FileState[], target: string): Promise<void>
 		try {
 			file.status = 'converting';
 			const outputName = getFileBaseName(file.input) + targetFormat.extension;
-			const options = [
-				...targetFormat.options,
-				'-b:a',
-				'128k',
-				'-vf',
-				'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-				'-sn',
-				'-dn',
-				'-threads',
-				`6`
-			];
-			file.output = await ffcore.transcode(file.input, options, outputName);
+			file.output = await ffcore.transcode(file.input, [...targetFormat.options, ...generalOptions], outputName);
 			file.status = 'done';
 		} catch (error) {
 			file.status = 'error';

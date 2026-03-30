@@ -6,7 +6,7 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import { type FileState } from '$lib/utils/utils';
-	import { allSameType, allSupportedType, allUnderMB } from '$lib/utils/validation';
+	import { allSupportedType, allUnderMB } from '$lib/utils/validation';
 	import { fly } from 'svelte/transition';
 	import { convert, formats } from './utils';
 
@@ -18,7 +18,6 @@
 
 	function onFilesUploaded(uploadedFiles: FileState[]) {
 		if (!allUnderMB(uploadedFiles, 500)) return;
-		if (!allSameType(uploadedFiles)) return;
 		if (!allSupportedType(uploadedFiles, ['video'])) return;
 		files = uploadedFiles;
 		status = 'selecting-format';
@@ -46,8 +45,8 @@
 <section class="pt-6 text-center md:pt-12">
 	<h1 class="pb-4 text-4xl font-semibold">Video Converter</h1>
 	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
-		PLACE HOLDER PLACE HOLDER PLACE HOLDER PLACE HOLDER PLACE HOLDER <br class="hidden md:block" />
-		PLACE HOLDER PLACE HOLDER PLACE HOLDER PLACE HOLDER
+		Easily convert videos to any popular format. <br class="hidden md:block" />
+		Save time by batch converting multiple videos in bulk.
 	</h2>
 </section>
 

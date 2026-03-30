@@ -14,7 +14,6 @@
 
 	async function onFilesUploaded(uploadedFiles: FileState[]) {
 		if (!allUnderMB(uploadedFiles, 500)) return;
-		if (!allSameType(uploadedFiles)) return;
 		if (!allSupportedType(uploadedFiles, ['video', 'image'])) return;
 		files = uploadedFiles;
 		status = 'converting';
