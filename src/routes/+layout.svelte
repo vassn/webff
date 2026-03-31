@@ -18,10 +18,7 @@
 
 <svelte:head>
 	<title>WebFF</title>
-
 	<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-	<link rel="preload" href="/fonts/inter-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-
 	<link rel="icon" href="/favicon.svg" />
 </svelte:head>
 
