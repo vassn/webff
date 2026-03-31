@@ -3,7 +3,7 @@
 	import FileUpload from '$lib/components/file-upload.svelte';
 	import { ffcore } from '$lib/utils/ffcore.svelte';
 	import type { FileState } from '$lib/utils/utils';
-	import { allSameType, allSupportedType, allUnderMB } from '$lib/utils/validation';
+	import { allSupportedType, allUnderMB } from '$lib/utils/validation';
 	import { fly } from 'svelte/transition';
 	import { convert } from './utils';
 
@@ -27,6 +27,10 @@
 		ffcore.load();
 	}
 </script>
+
+<svelte:head>
+	<title>WebFF | Web Optimizer</title>
+</svelte:head>
 
 <section class="pt-6 text-center md:pt-12">
 	<h1 class="pb-4 text-4xl font-semibold">Web Optimizer</h1>

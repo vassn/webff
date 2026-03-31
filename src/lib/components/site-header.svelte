@@ -13,8 +13,7 @@
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-0.5">
 				<Button variant="ghost" href="/" class="gap-0 text-lg font-bold">
-					<span>Web</span>
-					<span class="text-primary">FF</span>
+					<span>Web</span> <span class="text-primary">FF</span>
 				</Button>
 				<Button variant="ghost" href="/image-converter">Image Converter</Button>
 				<Button variant="ghost" href="/video-converter">Video Converter</Button>
