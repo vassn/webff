@@ -19,7 +19,7 @@ export async function convert(files: FileState[], target: string): Promise<void>
 			if (target === '.jpeg' || target === '.png' || target === '.webp') {
 				file.output = await convertCanvas(file.input, target, outputName);
 			} else {
-				file.output = await ffcore.transcode(file.input, [], outputName);
+				file.output = await ffcore.transcode(file.input, ['-threads', '1', '-frames:v', '1'], outputName);
 			}
 
 			file.status = 'done';
