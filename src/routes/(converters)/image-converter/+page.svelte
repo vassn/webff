@@ -42,6 +42,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>WebFF | Image Converter</title>
+</svelte:head>
+
 <section class="pt-6 text-center md:pt-12">
 	<h1 class="pb-4 text-4xl font-semibold">Image Converter</h1>
 	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">

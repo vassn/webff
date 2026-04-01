@@ -15,8 +15,7 @@
 		</div>
 
 		<div class="hidden items-center gap-4 md:flex">
-			<!-- <a href="/" class="underline-offset-4 hover:underline">About</a> -->
-
+			<a href="/#about" class="underline-offset-4 hover:underline">About</a>
 			<a href="https://github.com/vassn/webff" target="_blank" class="underline-offset-4 hover:underline"> GitHub </a>
 		</div>
 	</div>

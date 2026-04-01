@@ -1,5 +1,16 @@
 <script lang="ts">
-	import { Clapperboard, Computer, Cpu, Globe, Image, Minimize, Music, PanelsTopLeft, Shield } from '@lucide/svelte';
+	import {
+		CircleQuestionMark,
+		Clapperboard,
+		Computer,
+		Cpu,
+		Globe,
+		Image,
+		Minimize,
+		Music,
+		PanelsTopLeft,
+		Shield
+	} from '@lucide/svelte';
 </script>
 
 <svelte:head>
@@ -61,11 +72,18 @@
 		</div>
 		<p class="text-sm text-muted-foreground italic">Work in progress.</p>
 	</div>
+
+	<a
+		href="/#about"
+		class="rounded-lg border border-l-4 bg-card p-4 font-medium shadow-lg duration-150 hover:border-muted-foreground">
+		<div class="mb-2.5 flex items-center gap-2.5">
+			<CircleQuestionMark /> <span class="text-lg">About WebFF</span>
+		</div>
+		<p class="text-sm text-muted-foreground">Learn more about the site, how it works, and what technologies it uses.</p>
+	</a>
 </section>
 
-<hr class="mx-auto mt-32 mb-12 max-w-6xl" />
-
-<section class="mx-auto grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+<section class="mx-auto grid max-w-4xl grid-cols-1 gap-4 pt-48 lg:grid-cols-2 lg:gap-6">
 	<div class="p-6">
 		<p class="flex items-center justify-center gap-2.5">
 			<Shield class="size-6" />
@@ -74,17 +92,6 @@
 		<p class="mx-auto max-w-prose pt-4 text-center text-muted-foreground">
 			Files never leave your device. Since processing happens entirely in-browser, your data is never uploaded, stored,
 			or shared with anyone.
-		</p>
-	</div>
-
-	<div class="p-6">
-		<p class="flex items-center justify-center gap-2.5">
-			<Computer class="size-6" />
-			<span class="text-lg font-bold">Fully Local</span>
-		</p>
-		<p class="mx-auto max-w-prose pt-4 text-center text-muted-foreground">
-			Skip the wait for slow uploads. Conversions start instantly because everything happens on your own computer, not a
-			distant server.
 		</p>
 	</div>
 
@@ -101,6 +108,17 @@
 
 	<div class="p-6">
 		<p class="flex items-center justify-center gap-2.5">
+			<Computer class="size-6" />
+			<span class="text-lg font-bold">Fully Local</span>
+		</p>
+		<p class="mx-auto max-w-prose pt-4 text-center text-muted-foreground">
+			Skip the wait for slow uploads. Conversions start instantly because everything happens on your own computer, not a
+			distant server.
+		</p>
+	</div>
+
+	<div class="p-6">
+		<p class="flex items-center justify-center gap-2.5">
 			<Cpu class="size-6" />
 			<span class="text-lg font-bold">Powerful Tech</span>
 		</p>
@@ -111,12 +129,12 @@
 	</div>
 </section>
 
-<hr class="mx-auto mt-12 mb-32 max-w-6xl" />
-
-<section id="faqs" class="text-center">
-	<h2 class="text-4xl font-semibold tracking-widest">FAQs</h2>
+<section id="about" class="pt-36">
+	<h2 class="flex justify-center text-4xl font-semibold tracking-wide">
+		About Web <span class="text-primary">FF</span>
+	</h2>
 </section>
 
 <section class="pt-6 text-center">
-	<p>Work in progress.</p>
+	<p class="h-[80vh]">Work in progress.</p>
 </section>
