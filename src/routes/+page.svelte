@@ -129,7 +129,7 @@
 	</div>
 </section>
 
-<section id="about" class="pt-36">
+<section id="about" class="mt-12 pt-36">
 	<h2 class="flex justify-center text-4xl font-semibold tracking-wide">
 		About Web <span class="text-primary">FF</span>
 	</h2>

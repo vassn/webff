@@ -1,26 +1,8 @@
 import { ffcore } from '$lib/utils/ffcore.svelte';
 import { getFileBaseName, getFileType, type FileState } from '$lib/utils/utils';
 
-const webmOptions = [
-	'-c:v',
-	'libvpx',
-	'-crf',
-	'10',
-	'-b:v',
-	'0',
-	'-cpu-used',
-	'5',
-	'-c:a',
-	'libvorbis',
-	'-b:a',
-	'128k',
-	'-vf',
-	'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-	'-sn',
-	'-dn',
-	'-threads',
-	`6`
-];
+const generalOptions = ['-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-threads', '4', '-sn', '-dn'];
+const webmOptions = ['-c:v', 'libvpx', '-crf', '15', '-cpu-used', '5', '-c:a', 'libvorbis', '-q:a', '4'];
 
 export async function convert(files: FileState[]): Promise<void> {
 	for (const file of files) {
@@ -37,7 +19,7 @@ export async function convert(files: FileState[]): Promise<void> {
 				file.output = new File([blob], outputName);
 			} else {
 				const outputName = getFileBaseName(file.input) + '.webm';
-				file.output = await ffcore.transcode(file.input, webmOptions, outputName);
+				file.output = await ffcore.transcode(file.input, [...generalOptions, ...webmOptions], outputName);
 			}
 			file.status = 'done';
 		} catch (error) {

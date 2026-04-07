@@ -1,7 +1,7 @@
 import { toast } from 'svelte-sonner';
 import type { FileState } from './utils';
 
-export function allUnderMB(files: FileState[], MB: number): boolean {
+export function allUnderMB(files: FileState[], MB: number = 100): boolean {
 	if (!files.every((file) => file.input.size < MB * 1e6)) {
 		toast.error(`Each uploaded file must be under ${MB}MB`);
 		return false;

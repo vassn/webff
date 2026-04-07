@@ -42,7 +42,7 @@
 	<Upload class="size-8 text-muted-foreground" />
 	<div class="py-4 text-lg font-medium">Upload Files</div>
 	<div class="text-sm text-muted-foreground">Drag and drop or click to upload</div>
-	<div class="text-sm text-muted-foreground">Accepts files up to 500MB in size.</div>
+	<div class="text-sm text-muted-foreground">Accepts files up to 100MB in size.</div>
 </label>
 
 <input onchange={handleChange} id="file_upload" type="file" multiple class="hidden" />

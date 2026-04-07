@@ -37,7 +37,7 @@ const compressionOptions = (videoBitrateKbps: number) => [
 	'-preset',
 	'superfast',
 	'-threads',
-	'4',
+	'6',
 	'-vf',
 	'scale=trunc(iw/2)*2:trunc(ih/2)*2',
 	'-c:a',

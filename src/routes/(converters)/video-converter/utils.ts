@@ -1,28 +1,23 @@
 import { ffcore } from '$lib/utils/ffcore.svelte';
 import { getFileBaseName, type FileState } from '$lib/utils/utils';
 
-const generalOptions = ['-b:a', '128k', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-sn', '-dn', '-threads', `6`];
-const x264Options = ['-c:v', 'libx264', '-preset', 'superfast', '-crf', '23', '-c:a', 'aac'];
+const generalOptions = ['-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-threads', '4', '-sn', '-dn'];
+
+const x264Options = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k'];
+
+const webmOptions = ['-c:v', 'libvpx', '-crf', '15', '-cpu-used', '5', '-c:a', 'libvorbis', '-q:a', '4'];
+
+const aviOptions = ['-c:v', 'mpeg4', '-q:v', '8', '-c:a', 'libmp3lame', '-q:a', '5'];
+
+const wmvOptions = ['-c:v', 'wmv2', '-q:v', '5', '-c:a', 'wmav2', '-b:a', '128k'];
 
 export const formats = [
 	{ label: 'MP4', extension: '.mp4', options: x264Options },
 	{ label: 'MOV', extension: '.mov', options: x264Options },
 	{ label: 'MKV', extension: '.mkv', options: x264Options },
-	{
-		label: 'WEBM',
-		extension: '.webm',
-		options: ['-c:v', 'libvpx', '-crf', '10', '-b:v', '0', '-cpu-used', '5', '-c:a', 'libvorbis']
-	},
-	{
-		label: 'AVI',
-		extension: '.avi',
-		options: ['-c:v', 'mpeg4', '-vtag', 'xvid', '-q:v', '5', '-c:a', 'libmp3lame']
-	},
-	{
-		label: 'WMV',
-		extension: '.wmv',
-		options: ['-c:v', 'wmv2', '-q:v', '5', '-c:a', 'wmav2']
-	}
+	{ label: 'WEBM', extension: '.webm', options: webmOptions },
+	{ label: 'AVI', extension: '.avi', options: aviOptions },
+	{ label: 'WMV', extension: '.wmv', options: wmvOptions }
 ];
 
 export async function convert(files: FileState[], target: string): Promise<void> {

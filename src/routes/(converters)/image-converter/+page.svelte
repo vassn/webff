@@ -17,7 +17,7 @@
 	let target = $state('');
 
 	function onFilesUploaded(uploadedFiles: FileState[]) {
-		if (!allUnderMB(uploadedFiles, 500)) return;
+		if (!allUnderMB(uploadedFiles)) return;
 		if (!allSupportedType(uploadedFiles, ['image'])) return;
 		files = uploadedFiles;
 		status = 'selecting-format';

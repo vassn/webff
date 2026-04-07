@@ -17,7 +17,7 @@
 	let target = $state('');
 
 	function onFilesUploaded(uploadedFiles: FileState[]) {
-		if (!allUnderMB(uploadedFiles, 500)) return;
+		if (!allUnderMB(uploadedFiles)) return;
 		if (!allSupportedType(uploadedFiles, ['video'])) return;
 		files = uploadedFiles;
 		status = 'selecting-format';
@@ -92,5 +92,14 @@
 {:else}
 	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<ConversionProgress {files} {reset} />
+	</section>
+{/if}
+
+{#if status === 'converting'}
+	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 300, delay: 3000 }}>
+		<p class="text-center text-muted-foreground">
+			Video conversion in your browser takes longer than on desktop. <br />
+			Please keep this tab open.
+		</p>
 	</section>
 {/if}
