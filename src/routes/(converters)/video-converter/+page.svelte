@@ -46,9 +46,9 @@
 	<title>WebFF | Video Converter</title>
 </svelte:head>
 
-<section class="pt-6 text-center md:pt-12">
-	<h1 class="pb-4 text-4xl font-semibold">Video Converter</h1>
-	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
+<section class="space-y-4 pt-12 text-center">
+	<h1 class="text-4xl font-semibold">Video Converter</h1>
+	<h2 class="mx-auto max-w-prose text-base text-muted-foreground lg:text-lg">
 		Easily convert videos to any popular format. <br class="hidden md:block" />
 		Save time by batch converting multiple videos in bulk.
 	</h2>
@@ -92,14 +92,5 @@
 {:else}
 	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 150, delay: 100 }}>
 		<ConversionProgress {files} {reset} />
-	</section>
-{/if}
-
-{#if status === 'converting'}
-	<section class="flex justify-center pt-12" in:fly={{ y: 6, duration: 300, delay: 3000 }}>
-		<p class="text-center text-muted-foreground">
-			Video conversion in your browser takes longer than on desktop. <br />
-			Please keep this tab open.
-		</p>
 	</section>
 {/if}

@@ -46,9 +46,9 @@
 	<title>WebFF | Audio Converter</title>
 </svelte:head>
 
-<section class="pt-6 text-center md:pt-12">
-	<h1 class="pb-4 text-4xl font-semibold">Audio Converter</h1>
-	<h2 class="mx-auto max-w-prose text-lg text-muted-foreground">
+<section class="space-y-4 pt-12 text-center">
+	<h1 class="text-4xl font-semibold">Audio Converter</h1>
+	<h2 class="mx-auto max-w-prose text-base text-muted-foreground lg:text-lg">
 		Easily convert audio files to any popular format. <br class="hidden md:block" />
 		Save time by batch converting multiple audio files in bulk.
 	</h2>

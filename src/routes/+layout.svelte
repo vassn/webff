@@ -28,7 +28,7 @@
 
 <SiteHeader />
 
-<main class="container mx-auto grid grid-cols-1 grid-rows-1 overflow-x-hidden px-4 pt-6 pb-12 md:pt-12">
+<main class="container mx-auto grid grid-cols-1 grid-rows-1 overflow-x-hidden px-4 pt-6 pb-12 lg:pt-12">
 	{#key page.url.pathname}
 		<div class="col-start-1 row-start-1" in:fade={{ duration: 200 }}>
 			{@render children()}

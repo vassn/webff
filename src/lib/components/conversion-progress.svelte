@@ -5,6 +5,7 @@
 	import pkg from 'file-saver';
 	import JSZip from 'jszip';
 	import { toast } from 'svelte-sonner';
+	import { fly } from 'svelte/transition';
 	import { Button } from './ui/button';
 	import Progress from './ui/progress/progress.svelte';
 	import { Spinner } from './ui/spinner';
@@ -46,61 +47,72 @@
 	}
 </script>
 
-<div class="w-full max-w-lg rounded-lg bg-card p-4">
-	{#if ffcore.state !== 'loaded'}
-		<!-- Loading FFmpeg -->
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-4">
-				<Spinner class="size-5" />
-				<span class="text-sm font-medium">Loading FFmpeg...</span>
-			</div>
+<div class="flex w-full flex-col items-center">
+	<div class="w-full max-w-lg rounded-lg border bg-card p-4 shadow-lg dark:border-none">
+		{#if ffcore.state !== 'loaded'}
+			<!-- Loading FFmpeg -->
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<Spinner class="size-5" />
+					<span class="text-sm font-medium">Loading FFmpeg...</span>
+				</div>
 
-			<Button onclick={reset} variant="outline">
-				<X /> Cancel
-			</Button>
-		</div>
-	{:else if isConverting}
-		<!-- Converting -->
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-4">
-				<Spinner class="size-5" />
-				<span class="text-sm font-medium">Converting files...</span>
-			</div>
-
-			<div class="flex items-center gap-4">
-				<span class="text-sm font-medium text-muted-foreground tabular-nums">
-					{convertingCount} / {files.length}
-				</span>
 				<Button onclick={reset} variant="outline">
 					<X /> Cancel
 				</Button>
 			</div>
-		</div>
+		{:else if isConverting}
+			<!-- Converting -->
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<Spinner class="size-5" />
+					<span class="text-sm font-medium">Converting files...</span>
+				</div>
 
-		<div class="mt-6 mb-1">
-			{#if ffcore.currentType === 'image'}
-				<Progress value={0} class="animate-pulse" />
-			{:else}
-				<Progress value={ffcore.progress === 100 ? 0 : ffcore.progress} />
-			{/if}
-		</div>
-	{:else}
-		<!-- Done -->
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-4">
-				<Check class="size-5" />
-				<span class="text-sm font-medium">Conversion finished</span>
+				<div class="flex items-center gap-4">
+					<span class="text-sm font-medium text-muted-foreground tabular-nums">
+						{convertingCount} / {files.length}
+					</span>
+					<Button onclick={reset} variant="outline">
+						<X /> Cancel
+					</Button>
+				</div>
 			</div>
 
-			{#if !isDownloading}
-				<Button onclick={download}>
-					<Download /> Download files
-				</Button>
-			{:else}
-				<Button disabled>
-					<Spinner /> Download files
-				</Button>
-			{/if}
+			<div class="mt-6 mb-1">
+				{#if ffcore.currentType === 'image'}
+					<Progress value={0} class="animate-pulse" />
+				{:else}
+					<Progress value={ffcore.progress === 100 ? 0 : ffcore.progress} />
+				{/if}
+			</div>
+		{:else}
+			<!-- Done -->
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<Check class="size-5" />
+					<span class="text-sm font-medium">Conversion finished</span>
+				</div>
+
+				{#if !isDownloading}
+					<Button onclick={download}>
+						<Download /> Download files
+					</Button>
+				{:else}
+					<Button disabled>
+						<Spinner /> Download files
+					</Button>
+				{/if}
+			</div>
+		{/if}
+	</div>
+
+	{#if isConverting}
+		<div class="flex justify-center pt-8" in:fly|global={{ y: 6, duration: 300, delay: 5000 }}>
+			<p class="text-center text-muted-foreground">
+				Conversion in your browser take longer than on desktop. <br />
+				Please keep this tab open.
+			</p>
 		</div>
 	{/if}
 </div>

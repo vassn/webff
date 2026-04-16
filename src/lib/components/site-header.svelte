@@ -7,7 +7,7 @@
 	let clientHeight = $state(0);
 </script>
 
-<header bind:clientHeight class="sticky top-0 z-50 w-full bg-background px-4 py-2 md:px-8">
+<header bind:clientHeight class="sticky top-0 z-50 w-full bg-background px-4 py-2 lg:px-8">
 	<!-- Desktop View -->
 	<nav class="hidden lg:block">
 		<div class="flex items-center justify-between">
